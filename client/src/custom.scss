@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+
+$body-font: "Nunito", sans-serif;
+$primary: #aa30da;
+$success: #00AE64;
+
+// Import Bootstrap and its default variables
+@import '~bootstrap/scss/bootstrap.scss';
+
+body {
+    font-family: $body-font;
+    font-weight: normal;
+}
+
+@keyframes moveBackground {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -100vw 50vw;
+  }
+}
+
+#main-container {
+  background-image: url("./assets/images/background_stars.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  overflow-x: hidden;
+  z-index: -999999;
+  animation: moveBackground 100s linear infinite;
+}
+
+#spaceship-container {
+  background-image: url("./assets/images/background_controlroom.png");
+  background-size: 100% 100%;;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  overflow-x: hidden;
+  z-index: -99999;
+}
