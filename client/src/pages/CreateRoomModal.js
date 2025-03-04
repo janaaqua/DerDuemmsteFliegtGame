@@ -1,25 +1,33 @@
-import React from "react";
-import { Modal, Form, Button } from "react-bootstrap";
+import React, { useState } from "react";
+import { Modal, Form, Button, Carousel, Image } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
 import { usePlayerInfo } from "../contexts/playerInfoProvider";
 import { useGameRoom } from "../contexts/GameRoomProvider";
 import { useNavigate } from "react-router-dom";
 import Player from "../components/Player";
+import avatars from "../components/AvatarMap";
 
 export default function CreateRoomModal({ closeModal, isCreator }) {
   const { userName, setUserName, setIsCreator } = usePlayerInfo();
-  const { addPlayer, gameID, setGameID } = useGameRoom();
+  const { setPlayers, addPlayer, gameID, setGameID } = useGameRoom();
   const navigate = useNavigate();
+  const [carouselIndex, setCarouselIndex] = useState(0);
 
-  function handleSubmit(e) {
+  const handleSelect = (selectedIndex) => {
+    setCarouselIndex(selectedIndex);
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
+
+    setPlayers([]);
 
     // set GameRoom Informations
     const newPlayerID = uuidv4();
     const newPlayer = new Player({
       id: newPlayerID,
       name: userName,
-      avatar: "avatar_jana.png",
+      avatar: avatars[carouselIndex],
       isCreator: isCreator,
     });
     addPlayer(newPlayer);
@@ -53,6 +61,18 @@ export default function CreateRoomModal({ closeModal, isCreator }) {
                 setUserName(e.target.value);
               }}
             />
+            <Form.Label className="mt-3">Dein Avatar:</Form.Label>
+            <Carousel interval={null} indicators={false} onSelect={handleSelect}>
+              {avatars.map((avatar) => {
+                return (
+                  <Carousel.Item key={avatar}>
+                    <Image style={{ height: "300px" }} src={avatar}/>
+                  </Carousel.Item>
+                )
+              })}
+                
+             
+            </Carousel>
             <Button type="submit" className="mt-3">
               {isCreator ? "Spiel erstellen" : "Spiel beitreten"}
             </Button>

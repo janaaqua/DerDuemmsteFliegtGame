@@ -17,7 +17,7 @@ export function GameRoomProvider({ children }) {
   }
 
   return (
-    <GameRoomContext.Provider value={{ players, addPlayer, gameID, setGameID }}>
+    <GameRoomContext.Provider value={{ players, setPlayers, addPlayer, gameID, setGameID }}>
       {children}
     </GameRoomContext.Provider>
   );

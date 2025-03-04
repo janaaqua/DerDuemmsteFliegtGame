@@ -2,6 +2,7 @@ import React from "react";
 import { ListGroup, Badge } from "react-bootstrap";
 import { useGameRoom } from "../contexts/GameRoomProvider";
 import Player from "./Player";
+import avatars from "./AvatarMap";
 
 export default function PlayerList() {
   const { players, addPlayer } = useGameRoom();
@@ -10,7 +11,8 @@ export default function PlayerList() {
     const newPlayerID = Math.floor(Math.random() * 100000);
     const newPlayer = new Player({
       id: newPlayerID,
-      name: "Thorsten",
+      name: "Fridolin",
+      avatar: avatars[1],
       isCreator: false,
     });
 

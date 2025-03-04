@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { Form, InputGroup, Button, Container } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import PlayerList from "../components/PlayerList";
 import { useGameRoom } from "../contexts/GameRoomProvider";
 
@@ -9,6 +9,7 @@ export default function WaitingPage({ setGameReady }) {
   const gameID = useParams().gameID;
   const { players } = useGameRoom();
   const gameDomain = "https://localhost:3000/" + gameID;
+  const navigate = useNavigate();
 
   const selectCopiedField = () => {
     inputElement.current.select();
@@ -21,6 +22,11 @@ export default function WaitingPage({ setGameReady }) {
       // Hinweis
       console.log("Not enough players");
     }
+  }
+
+  function handleLeaveRoom() {
+
+    navigate("/")
   }
 
   // TODO: Show that successfully copied gameDomain
@@ -49,11 +55,12 @@ export default function WaitingPage({ setGameReady }) {
             </InputGroup>
           </Form.Group>
         </Form>
-        <PlayerList/>
+        <PlayerList />
         <Button onClick={handleGameStart} className="mt-3">
           Spiel starten
         </Button>
       </Container>
+      <Button onClick={handleLeaveRoom} className="position-absolute top-0 end-0 m-3"><i className="bi bi-box-arrow-left"></i></Button>
     </div>
   )
 }
