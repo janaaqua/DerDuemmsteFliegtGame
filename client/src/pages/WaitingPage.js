@@ -26,8 +26,8 @@ export default function WaitingPage({ setGameReady }) {
   // TODO: Show that successfully copied gameDomain
   return (
     <div id="main-container">
-      <Container style={{ height: "100vh", width: "50vw" }}>
-        <Form>
+      <Container className="d-flex flex-column justify-content-center align-items-center" style={{ height: "100vh", width: "50vw" }}>
+        <Form className="w-100">
           <Form.Group>
             <Form.Label>Link zum Beitreten:</Form.Label>
             <InputGroup className="mb-3">
@@ -49,7 +49,7 @@ export default function WaitingPage({ setGameReady }) {
             </InputGroup>
           </Form.Group>
         </Form>
-        <PlayerList />
+        <PlayerList/>
         <Button onClick={handleGameStart} className="mt-3">
           Spiel starten
         </Button>

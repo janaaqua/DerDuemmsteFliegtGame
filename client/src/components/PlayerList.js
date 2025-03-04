@@ -18,13 +18,13 @@ export default function PlayerList() {
   }
 
   return (
-    <ListGroup>
+    <ListGroup className="w-100">
       {players.map((player) => {
         return (
           <ListGroup.Item key={player.id}>
             {player.name}
             {player.isCreator ? (
-              <Badge bg="primary" pill>
+              <Badge className="ms-2" bg="primary">
                 Ersteller
               </Badge>
             ) : (

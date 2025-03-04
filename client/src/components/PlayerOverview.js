@@ -12,10 +12,10 @@ export default function PlayerOverview({ players, currentPlayer }) {
         <div className="d-flex gap-5 justify-content-center align-items-center">
         {players.map(player => {
             return (
-                <div key={player.id} className={player.id === currentPlayer.id ? "text-primary text-center" : "text-center"}>
-                    <div >{player.name}</div>
-                    <div>{"♥ ".repeat(player.lives)}</div>
-                    <Image className={player.id === currentPlayer.id ? "border rounded-circle border-primary border-3" : ""} style={{width: "90px"}} src={Avatar1}/>
+                <div key={player.id} className="text-primary text-center">
+                    <Image className={player.id === currentPlayer.id ? "bordered-image mb-2" : "borderless-image mb-2"} src={Avatar1}/>
+                    {/*<div className="mt-2">{player.name}</div>*/}
+                    <div>{ Array.from(Array(player.lives), (x) => <i className="bi bi-heart-fill fs-6"> </i>) }</div>
                 </div>
             )
         })}

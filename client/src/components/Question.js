@@ -61,7 +61,7 @@ function handleNextQuestion() {
 }
 
   return (
-    <div className="position-absolute start-50 translate-middle-x text-light d-flex flex-column align-items-center text-center" style={isCreator ? {top: "30%"} : { top: "35%"}}>
+    <div className="d-flex flex-column align-items-center text-center" /*style={isCreator ? {top: "30%"} : { top: "35%"}}*/>
       <div className="fs-3 mb-3">{currentPlayerName},</div>
       {data.length > 0 && questionIndex < data.length && (<div className="fs-1 mb-3">{data[questionIndex].Frage}</div>) }
       
