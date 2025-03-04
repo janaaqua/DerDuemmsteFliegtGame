@@ -36,8 +36,7 @@ export default function GamePage({ setGameReady }) {
       <div id="spaceship-container"></div>
       <div className="position-absolute top-0 start-0 m-3 text-light">Runde {round} / {MAX_ROUNDS}</div>
       <Button onClick={() => {setGameReady(false)}} className="position-absolute top-0 end-0 m-3"><i className="bi bi-box-arrow-left"></i></Button>
-      <p className="position-absolute top-0 start-50 translate-middle-x mt-3 text-light fs-1">{players[currentPlayerIndex].name},</p>
-      <Question nextPlayer={nextPlayer}/>
+      <Question nextPlayer={nextPlayer} currentPlayerName={players[currentPlayerIndex].name}/>
       {players && <PlayerOverview players={players} currentPlayer={players[currentPlayerIndex]}/>}
       <Timer />
     </div>

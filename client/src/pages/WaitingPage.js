@@ -15,7 +15,7 @@ export default function WaitingPage({ setGameReady }) {
   };
 
   function handleGameStart() {
-    if (players.length >= 0) {
+    if (players.length >= 1) {
       setGameReady(true);
     } else {
       // Hinweis

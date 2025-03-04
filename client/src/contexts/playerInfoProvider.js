@@ -9,7 +9,7 @@ export function usePlayerInfo() {
 
 export function PlayerInfoProvider({ children }) {
   const [userName, setUserName] = useLocalStorage("userName");
-  const [isCreator, setIsCreator] = useState(true);
+  const [isCreator, setIsCreator] = useState(false);
 
   return (
     <PlayerInfoContext.Provider value={{ userName, setUserName, isCreator, setIsCreator }}>

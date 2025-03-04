@@ -30,8 +30,7 @@ export default function HomePage({ gameID, setGameID }) {
       <Modal show={modalOpen} onHide={closeModal}>
         <CreateRoomModal
           closeModal={closeModal}
-          gameID={gameID}
-          setGameID={setGameID}
+          isCreator={true}
         />
       </Modal>
     </div>

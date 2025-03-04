@@ -6,9 +6,9 @@ import { useGameRoom } from "../contexts/GameRoomProvider";
 import { useNavigate } from "react-router-dom";
 import Player from "../components/Player";
 
-export default function CreateRoomModal({ closeModal }) {
+export default function CreateRoomModal({ closeModal, isCreator }) {
   const { userName, setUserName, setIsCreator } = usePlayerInfo();
-  const { addPlayer, setGameID } = useGameRoom();
+  const { addPlayer, gameID, setGameID } = useGameRoom();
   const navigate = useNavigate();
 
   function handleSubmit(e) {
@@ -20,15 +20,20 @@ export default function CreateRoomModal({ closeModal }) {
       id: newPlayerID,
       name: userName,
       avatar: "avatar_jana.png",
-      isCreator: true,
+      isCreator: isCreator,
     });
     addPlayer(newPlayer);
-    setIsCreator(true);
-    const newGameID = uuidv4();
-    setGameID(newGameID);
+    setIsCreator(isCreator);
 
-    // navigate to Waiting Room
-    navigate(`game/${newGameID}`);
+    if (isCreator) {
+      const newGameID = uuidv4();
+      setGameID(newGameID);
+      // navigate to Waiting Room
+      navigate(`game/${newGameID}`);
+    } else {
+      // TODO: Join Room
+    }
+
     closeModal();
   }
 
@@ -49,7 +54,7 @@ export default function CreateRoomModal({ closeModal }) {
               }}
             />
             <Button type="submit" className="mt-3">
-              Spiel erstellen
+              {isCreator ? "Spiel erstellen" : "Spiel beitreten"}
             </Button>
           </Form.Group>
         </Form>
