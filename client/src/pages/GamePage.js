@@ -5,20 +5,23 @@ import { useGameRoom } from "../contexts/GameRoomProvider";
 import PlayerOverview from "../components/PlayerOverview"
 import Timer from "../components/Timer";
 import { usePlayerInfo } from "../contexts/playerInfoProvider"
+import Voting from "../components/Voting"
 
-// TODO: REMOVE GAME CREATOR FROM PLAYER LIST!
-// TODO: PlayerOverview
+// TODO: Voting
 // TODP: Rundenanzeige und -funktionalität
-// TODO: Runden-Timer (irgendwann im Waiting Room einstellbar)
-// TODO: Am Anfang Timer (5 Sekunden), wo Frage hidden ist
 export default function GamePage({ setGameReady }) {
   const MAX_ROUNDS = 3;
 
-  const { players } = useGameRoom();
+  // player informations
+  const players = useGameRoom().players?.filter(player => !player.isCreator) || [];
   const { isCreator } = usePlayerInfo();
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
+
+  // round informations
   const [round, setRound] = useState(1);
-  const [roundStarted, setRoundStarted] = useState(false);
+  const [preRound, setPreRound] = useState(true);
+  const [votingPhaseStarted, setVotingPhaseStarted] = useState(false);
+  const [timerStop, setTimerStop] = useState(true);
 
 
   const nextPlayer = () => {
@@ -35,6 +38,13 @@ export default function GamePage({ setGameReady }) {
     }
   }, [round])
 
+  useEffect(() => {
+    // round ended
+    if(timerStop && !preRound) {
+      setVotingPhaseStarted(true);
+    }
+  }, [timerStop])
+
   return (
     <div id="main-container">
       <div id="spaceship-container"></div>
@@ -43,23 +53,22 @@ export default function GamePage({ setGameReady }) {
       <Button onClick={() => {setGameReady(false)}} className="position-absolute top-0 end-0 m-3"><i className="bi bi-box-arrow-left"></i></Button>
 
       <div className="windowContent text-light">
-      { roundStarted ? 
-        <>
-          <Question nextPlayer={nextPlayer} currentPlayerName={players[currentPlayerIndex].name}/>
-        </>
-      :
-        <>
-        {isCreator ? 
-          <Button onClick={() => {setRoundStarted(true)}}>Runde starten</Button>
-        :
-          <p className="fs-3">Runde startet gleich...</p>
-        }
-        </>
-      }
+        { preRound && ( isCreator ? (
+            <Button onClick={() => {setPreRound(false); setTimerStop(false)}}>
+              Runde starten
+              </Button>
+              ) : (
+              <p className="fs-3">Runde startet gleich...</p>
+            )
+        )}
+
+        { votingPhaseStarted && <Voting />}
+
+        { !preRound && !votingPhaseStarted && <Question nextPlayer={nextPlayer} currentPlayerName={players[currentPlayerIndex].name}/> }  
       </div>
       
       {players && <PlayerOverview players={players} currentPlayer={players[currentPlayerIndex]}/>}
-      <Timer />
+      <Timer timerStop={timerStop} setTimerStop={setTimerStop}/>
     </div>
   );
 }
