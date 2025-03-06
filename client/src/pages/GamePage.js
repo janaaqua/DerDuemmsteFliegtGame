@@ -1,16 +1,22 @@
 import React, { useEffect, useState } from "react";
-import Question from "../components/Question";
 import { Button } from "react-bootstrap";
 import { useGameRoom } from "../contexts/GameRoomProvider";
-import PlayerOverview from "../components/PlayerOverview"
-import Timer from "../components/Timer";
 import { usePlayerInfo } from "../contexts/playerInfoProvider"
+import PlayerOverview from "../components/PlayerOverview"
+import Question from "../components/Question";
+import Timer from "../components/Timer";
 import Voting from "../components/Voting"
+import Papa from 'papaparse'
+import Data from "../assets/Questions1.csv"
 
 // TODO: Voting
 // TODP: Rundenanzeige und -funktionalität
 export default function GamePage({ setGameReady }) {
   const MAX_ROUNDS = 3;
+
+  // questions
+  const [questionData, setQuestionData] = useState([]);
+  const [questionsByPlayer, setQuestionsByPlayer] = useState(new Map());
 
   // player informations
   const players = useGameRoom().players?.filter(player => !player.isCreator) || [];
@@ -23,6 +29,14 @@ export default function GamePage({ setGameReady }) {
   const [votingPhaseStarted, setVotingPhaseStarted] = useState(false);
   const [timerStop, setTimerStop] = useState(true);
 
+  const updateQuestionsByPlayer = (playerID, question, wasCorrect) => {
+    const newMap = new Map(questionsByPlayer);
+    const existingEntries = newMap.get(playerID) || [];
+    newMap.set(playerID, [...existingEntries, {question, wasCorrect}]);
+    setQuestionsByPlayer(newMap);
+
+    console.log(questionsByPlayer)
+  }
 
   const nextPlayer = () => {
     if (currentPlayerIndex + 1 < players.length) {
@@ -31,6 +45,23 @@ export default function GamePage({ setGameReady }) {
       setCurrentPlayerIndex(0)
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(Data);
+      // create readable stream from the fetched responses body
+      const reader = response.body.getReader();
+      // read a chunk of data
+      const result = await reader.read();
+      const decoder = new TextDecoder("utf-8");
+      // convert binary data into string
+      const csvData = decoder.decode(result.value)
+      const parsedData = Papa.parse(csvData, {header: true, skipEmptyLines: true}).data;
+      setQuestionData(parsedData);
+    }
+  
+    fetchData();
+  }, [])
 
   useEffect(() => {
     if(round >= MAX_ROUNDS) {
@@ -43,7 +74,7 @@ export default function GamePage({ setGameReady }) {
     if(timerStop && !preRound) {
       setVotingPhaseStarted(true);
     }
-  }, [timerStop])
+  }, [timerStop, preRound])
 
   return (
     <div id="main-container">
@@ -62,9 +93,9 @@ export default function GamePage({ setGameReady }) {
             )
         )}
 
-        { votingPhaseStarted && <Voting />}
+        { votingPhaseStarted && <Voting isCreator={isCreator} questionsByPlayer={questionsByPlayer} players={players}/>}
 
-        { !preRound && !votingPhaseStarted && <Question nextPlayer={nextPlayer} currentPlayerName={players[currentPlayerIndex].name}/> }  
+        { !preRound && !votingPhaseStarted && <Question data={questionData} nextPlayer={nextPlayer} currentPlayer={players[currentPlayerIndex]} updateQuestionsByPlayer={updateQuestionsByPlayer}/> }  
       </div>
       
       {players && <PlayerOverview players={players} currentPlayer={players[currentPlayerIndex]}/>}

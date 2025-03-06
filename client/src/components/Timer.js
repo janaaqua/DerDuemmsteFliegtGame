@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react'
 
 export default function Timer( { timerStop, setTimerStop }) {
   const MINUTES_PER_ROUND = 0;
-  const SECONDS_PER_ROUND = 20;
+  const SECONDS_PER_ROUND = 10;
 
   const [minutesLeft, setMinutesLeft] = useState(MINUTES_PER_ROUND);
   const [secondsLeft, setSecondsLeft] = useState(SECONDS_PER_ROUND);

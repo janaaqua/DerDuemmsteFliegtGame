@@ -1,34 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { Button } from "react-bootstrap"
-import Papa from 'papaparse'
-import Data from "../assets/Questions1.csv"
 import { usePlayerInfo } from '../contexts/playerInfoProvider'
 
 
 // TODO: index random value < data.length, wenn Frage fertig diese als "gesehen" markieren
-export default function Question({ nextPlayer, currentPlayerName }) {
-const [data, setData] = useState([]);
+export default function Question({ data, nextPlayer, currentPlayer, updateQuestionsByPlayer }) {
 const [questionIndex, setQuestionIndex] = useState(0);
 const { isCreator } = usePlayerInfo();
 const [isCorrect, setIsCorrect] = useState(null);
 const [questionAnswered, setQuestionAnswered] = useState(false);
-
-useEffect(() => {
-  const fetchData = async () => {
-    const response = await fetch(Data);
-    // create readable stream from the fetched responses body
-    const reader = response.body.getReader();
-    // read a chunk of data
-    const result = await reader.read();
-    const decoder = new TextDecoder("utf-8");
-    // convert binary data into string
-    const csvData = decoder.decode(result.value)
-    const parsedData = Papa.parse(csvData, {header: true, skipEmptyLines: true}).data;
-    setData(parsedData);
-  }
-
-  fetchData();
-}, [])
 
 useEffect(() => {
   if (data.length > 0) {
@@ -44,11 +24,13 @@ function randomIndex() {
 function handleIsCorrect() {
   setIsCorrect(true)
   setQuestionAnswered(true)
+  updateQuestionsByPlayer(currentPlayer.id, data[questionIndex].Frage, true)
 }
 
 function handleIsIncorrect() {
   setIsCorrect(false)
   setQuestionAnswered(true)
+  updateQuestionsByPlayer(currentPlayer.id, data[questionIndex].Frage, false)
 }
 
 function handleNextQuestion() {
@@ -62,7 +44,7 @@ function handleNextQuestion() {
 
   return (
     <div className="d-flex flex-column align-items-center text-center" /*style={isCreator ? {top: "30%"} : { top: "35%"}}*/>
-      <div className="fs-3 mb-3">{currentPlayerName},</div>
+      <div className="fs-3 mb-3">{currentPlayer.name},</div>
       {data.length > 0 && questionIndex < data.length && (<div className="fs-1 mb-3">{data[questionIndex].Frage}</div>) }
       
 
