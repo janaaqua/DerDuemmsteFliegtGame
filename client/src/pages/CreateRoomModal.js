@@ -45,7 +45,6 @@ export default function CreateRoomModal({ closeModal, isCreator }) {
     closeModal();
   }
 
-  // TODO: Form.Group mit avatar-auswahl
   return (
     <>
       <Modal.Header closeButton></Modal.Header>

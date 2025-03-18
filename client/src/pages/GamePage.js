@@ -35,7 +35,7 @@ export default function GamePage({ setGameReady }) {
     newMap.set(playerID, [...existingEntries, {question, wasCorrect}]);
     setQuestionsByPlayer(newMap);
 
-    console.log(questionsByPlayer)
+    console.log(newMap)
   }
 
   const nextPlayer = () => {

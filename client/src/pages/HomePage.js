@@ -27,7 +27,7 @@ export default function HomePage({ gameID, setGameID }) {
           </Card.Body>
         </Card>
       </Container>
-      <Modal show={modalOpen} onHide={closeModal}>
+      <Modal show={modalOpen} onHide={closeModal} centered>
         <CreateRoomModal
           closeModal={closeModal}
           isCreator={true}
